@@ -1,0 +1,31 @@
+name: Delete Store Submission
+
+on:
+  workflow_dispatch:
+    inputs:
+      submission_id:
+        description: 'Submission ID to delete'
+        required: true
+        type: string
+
+jobs:
+  delete_submission:
+    name: Delete Store Submission
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure Store Credentials 🔑
+        uses: jandedobbeleer/store-submission@submission-status
+        with:
+          command: configure
+          type: win32
+          seller-id: ${{ secrets.SELLER_ID }}
+          product-id: ${{ secrets.PRODUCT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+
+      - name: Delete Submission 🗑️
+        uses: jandedobbeleer/store-submission@submission-status
+        with:
+          command: delete
+          submission-id: ${{ github.event.inputs.submission_id }}
